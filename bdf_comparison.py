@@ -10,6 +10,7 @@ def summary_comparison(baseline_bdf, updated_bdf):
 
 	df = pd.DataFrame(index=cards)
 
+	df["Card"] = cards
 	df["Baseline"] = 0
 	df["Updated"] = 0
 	

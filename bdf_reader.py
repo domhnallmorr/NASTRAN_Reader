@@ -4,7 +4,7 @@ from nastran_reader import bdf_cards
 
 class BdfFile:
 	def __init__(self, filepath, process_includes=True, verbose=False):
-		self.version = "V0.0.3"
+		self.version = "V0.0.4"
 		assert os.path.isfile(filepath) is True, f'\nThe following supplied file does not exist:\n\t"{filepath}"'
 		
 		self.setup_variables()
@@ -65,6 +65,31 @@ class BdfFile:
 		self.spc1s = {}
 		self.spcadds = {}
 
+		self.cards = {
+			"CBARs": self.cbars,
+			"CBEAMs": self.cbeams,
+			"CELAS1s": self.celas1s,
+			"CORD2Rs": self.cord2rs,
+			"CQUAD4s": self.cquad4s,
+			"CTRIAs": self.ctria3s,
+			"CRODs": self.crods,
+			"FORCEs": self.forces,
+			"GRIDs": self.grids,
+			"MAT1s": self.mat1s,
+			"MAT2s": self.mat2s,
+			"MAT8s": self.mat8s,
+			"PBARs": self.pbars,
+			"PBEAMs": self.pbeams,
+			"PCOMPs": self.pcomps,
+			"PELASs": self.pelass,
+			"PRODs": self.prods,
+			"PSHELLs": self.pshells,
+			"RBE2s": self.rbe2s,
+			"RBE3s": self.rbe3s,
+			"SPC1s": self.spc1s,
+			"SPCADDs": self.spcadds,
+
+		}
 	def get_all_include_files(self):
 		if self.verbose is True:
 			print("Searching for Input Files")
@@ -238,8 +263,8 @@ class BdfFile:
 				
 	def generate_summary(self):
 		self.summary = {}
-		self.summary["CQUADS"] = len(self.cquad4s.keys())
-		self.summary["CTRIAs"] = len(self.ctria3s.keys())
+		for card in self.cards.keys():
+			self.summary[card] = len(self.cards[card])
 
 if __name__ == "__main__":
 
