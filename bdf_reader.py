@@ -4,7 +4,7 @@ from nastran_reader import bdf_cards
 
 class BdfFile:
 	def __init__(self, filepath, process_includes=True, verbose=False):
-		self.version = "V0.0.2"
+		self.version = "V0.0.3"
 		assert os.path.isfile(filepath) is True, f'\nThe following supplied file does not exist:\n\t"{filepath}"'
 		
 		self.setup_variables()
@@ -31,9 +31,12 @@ class BdfFile:
 		for error in self.errors:
 			print("\t" + error)
 
+		self.generate_summary()
+
 	def setup_variables(self):
 		self.current_section = "excecutive control"
 		self.include_files = {}
+		self.summary = {}
 
 		self.errors = []
 		self.number_of_errors = 0
@@ -233,7 +236,11 @@ class BdfFile:
 		elif field_format == "free":
 			return line.split(",")	
 				
-				
+	def generate_summary(self):
+		self.summary = {}
+		self.summary["CQUADS"] = len(self.cquad4s.keys())
+		self.summary["CTRIAs"] = len(self.ctria3s.keys())
+
 if __name__ == "__main__":
 
 	bdf = BdfFile(r"C:\Users\ev662f\Desktop\NEW_UPP_ATT_POS_FLT_new.bdf", verbose=True)

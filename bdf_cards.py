@@ -168,7 +168,7 @@ def process_mat8(bdf, data, field_format):
 		data_types  = [int, float, float, float, float, float, float, float, str,
 						str, float, float, float, float, float, float, float, float, str,
 						str, float, float, float]
-	print(data)
+	
 	id = int(data[1])
 	bdf.mat8s[id] = {f: None for f in fields}
 	populate_fields(bdf.mat8s, data, fields, data_types, id)		
