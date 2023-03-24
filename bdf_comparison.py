@@ -26,8 +26,53 @@ def summary_comparison(baseline_bdf, updated_bdf):
 
 	return df
 
+def cards_comparison(baseline_bdf, updated_bdf):
+	assert [baseline_bdf, updated_bdf] != [None, None], "Both Baseline and Updated BDFs are of type None, provide at least 1 BDF"
+	cards = {}
+
+	if baseline_bdf is not None:
+		for card in baseline_bdf.cards:
+			cards[card] = {"Altered": [], "Deleted": [], "New": [], "Unchanged": []}
+	elif updated_bdf is not None:
+		for card in updated_bdf.cards:
+			cards[card] = {"Altered": [], "Deleted": [], "New": [], "Unchanged": []}
+	
+	# If only 1 model provided, just return the card IDs, no comparison required
+	if None in [baseline_bdf, updated_bdf]:
+		if baseline_bdf is not None:
+			bdf = baseline_bdf
+		else:
+			bdf = updated_bdf
+
+		for card in cards.keys():
+			cards[card]["Unchanged"] = [i for i in bdf.cards[card].keys()]
+
+	else: # do the full comparison between the models
+		for card in cards.keys():
+			baseline_cards = baseline_bdf.cards[card]
+			updated_cards = updated_bdf.cards[card]
+			
+			# FIND NEW/SAME/ALTERED CARDS
+			for card_id in updated_cards.keys(): 
+				if card_id not in baseline_cards.keys(): # Card in updated model but not baseline model
+					cards[card]["New"].append(card_id)
+				else: # else card present in both models
+					if baseline_cards[card_id] == updated_cards[card_id]: # card is the same in both models
+						cards[card]["Unchanged"].append(card_id)
+					else: # else card is different between both models
+						cards[card]["Altered"].append(card_id)
+
+			# FIND DELTETED CARDS
+			for card_id in baseline_cards.keys():
+				if card_id not in updated_cards.keys(): # card in baseline model but not updated model
+					cards[card]["Deleted"].append(card_id)
+
+	return cards
+
 if __name__ == "__main__":
 	from nastran_reader import bdf_reader
 	bdf = bdf_reader.BdfFile(r"C:\Users\ev662f\Desktop\NEW_UPP_ATT_POS_FLT_new.bdf")
 
-	summary_comparison(bdf, None)
+	cards = cards_comparison(bdf, bdf)
+
+	print(cards)
