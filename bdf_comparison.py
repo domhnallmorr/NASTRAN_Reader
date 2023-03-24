@@ -67,12 +67,26 @@ def cards_comparison(baseline_bdf, updated_bdf):
 				if card_id not in updated_cards.keys(): # card in baseline model but not updated model
 					cards[card]["Deleted"].append(card_id)
 
-	return cards
+	# Create Dataframe of Quantities of cards
+	
+	df_quantities = pd.DataFrame(index=list(cards.keys()))
+	df_quantities["Altered"] = 0
+	df_quantities["Deleted"] = 0
+	df_quantities["New"] = 0
+	df_quantities["Unchanged"] = 0
+	
+	for card in cards.keys():
+		df_quantities.at[card, "Altered"] = len(cards[card]["Altered"])
+		df_quantities.at[card, "Deleted"] = len(cards[card]["Deleted"])
+		df_quantities.at[card, "New"] = len(cards[card]["New"])
+		df_quantities.at[card, "Unchanged"] = len(cards[card]["Unchanged"])
+
+	return cards, df_quantities
 
 if __name__ == "__main__":
 	from nastran_reader import bdf_reader
 	bdf = bdf_reader.BdfFile(r"C:\Users\ev662f\Desktop\NEW_UPP_ATT_POS_FLT_new.bdf")
 
-	cards = cards_comparison(bdf, bdf)
+	cards, df_quantities = cards_comparison(bdf, bdf)
 
-	print(cards)
+
