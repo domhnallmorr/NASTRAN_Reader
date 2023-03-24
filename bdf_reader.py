@@ -4,7 +4,7 @@ from nastran_reader import bdf_cards
 
 class BdfFile:
 	def __init__(self, filepath, process_includes=True, verbose=False):
-		self.version = "V0.1.0"
+		self.version = "V0.2.0"
 		assert os.path.isfile(filepath) is True, f'\nThe following supplied file does not exist:\n\t"{filepath}"'
 		
 		self.setup_variables()
@@ -68,8 +68,8 @@ class BdfFile:
 		self.cards = {
 			"CBARs": self.cbars,
 			"CBEAMs": self.cbeams,
-			"CELAS1s": self.celas1s,
-			"CORD2Rs": self.cord2rs,
+			# "CELAS1s": self.celas1s,
+			# "CORD2Rs": self.cord2rs,
 			"CQUAD4s": self.cquad4s,
 			"CTRIAs": self.ctria3s,
 			"CRODs": self.crods,
@@ -80,14 +80,14 @@ class BdfFile:
 			"MAT8s": self.mat8s,
 			"PBARs": self.pbars,
 			"PBEAMs": self.pbeams,
-			"PCOMPs": self.pcomps,
-			"PELASs": self.pelass,
+			# "PCOMPs": self.pcomps,
+			# "PELASs": self.pelass,
 			"PRODs": self.prods,
 			"PSHELLs": self.pshells,
-			"RBE2s": self.rbe2s,
-			"RBE3s": self.rbe3s,
-			"SPC1s": self.spc1s,
-			"SPCADDs": self.spcadds,
+			# "RBE2s": self.rbe2s,
+			# "RBE3s": self.rbe3s,
+			# "SPC1s": self.spc1s,
+			# "SPCADDs": self.spcadds,
 
 		}
 	def get_all_include_files(self):

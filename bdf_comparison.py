@@ -83,6 +83,32 @@ def cards_comparison(baseline_bdf, updated_bdf):
 
 	return cards, df_quantities
 
+def get_card_comparison_data(baseline_bdf, updated_bdf, card_type, card_id):
+	assert [baseline_bdf, updated_bdf] != [None, None], "Both Baseline and Updated BDFs are of type None, provide at least 1 BDF"
+
+	if baseline_bdf is not None:
+		fields = baseline_bdf.cards[card_type][card_id]
+	else:
+		fields = updated_bdf.cards[card_type][card_id]
+
+	fields = [f for f in fields if "continuation marker" not in f.lower() and "start line" not in f.lower()]
+
+	df = pd.DataFrame(index=fields)
+
+	df["Baseline"] = None
+	df["Updated"] = None
+	df["Delta"] = None
+
+	for field in fields:
+		if baseline_bdf is not None:
+			df.at[field, "Baseline"] = baseline_bdf.cards[card_type][card_id][field]
+		if updated_bdf is not None:
+			df.at[field, "Updated"] = updated_bdf.cards[card_type][card_id][field]
+ 
+	df["Delta"] = df["Updated"] - df["Baseline"]
+	
+	return df
+
 if __name__ == "__main__":
 	from nastran_reader import bdf_reader
 	bdf = bdf_reader.BdfFile(r"C:\Users\ev662f\Desktop\NEW_UPP_ATT_POS_FLT_new.bdf")
