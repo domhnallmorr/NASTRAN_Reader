@@ -6,6 +6,7 @@ Scripts for reading NASTRAN bdf files.
 Currently Support Cards:
 - CBAR
 - CBEAM
+- CORD2R
 - CTRIA3
 - CQUAD
 - CROD
