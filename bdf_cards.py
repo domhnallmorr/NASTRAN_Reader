@@ -1,4 +1,4 @@
-
+ 
 def process_cbar(bdf, data, field_format):
 	if field_format == "long":
 		fields = ["EID", "PID", "GA", "GB", "CONTINUATION MARKER",

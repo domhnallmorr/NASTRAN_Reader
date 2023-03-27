@@ -106,7 +106,7 @@ def get_card_comparison_data(baseline_bdf, updated_bdf, card_type, card_id):
 			df.at[field, "Updated"] = updated_bdf.cards[card_type][card_id][field]
  
 	df["Delta"] = df["Updated"] - df["Baseline"]
-	
+	 
 	return df
 
 if __name__ == "__main__":

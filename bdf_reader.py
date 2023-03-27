@@ -1,4 +1,4 @@
-import os
+import os 
 import pandas as pd
 from nastran_reader import bdf_cards
 
