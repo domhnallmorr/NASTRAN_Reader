@@ -42,6 +42,25 @@ def process_cbeam(bdf, data, field_format):
 	bdf.cbeams[id] = {f: None for f in fields}
 	populate_fields(bdf.cbeams, data, fields, data_types, id)
 
+def process_cord2r(bdf, data, field_format):
+	if field_format == "long":
+		fields = ["CID", "RID", "A1", "A2", "CONTINUATION MARKER",
+	    			"A3", "B1", "B2", "B3", "CONTINUATION MARKER",
+					"C1", "C2", "C3"]
+		data_types = [int, int, float, float, str,
+	       				float, float, float, float, str,
+						float, float, float]
+	else:
+		fields = ["CID", "RID", "A1", "A2", "A3", "B1", "B2", "B3", "CONTINUATION MARKER",
+					"C1", "C2", "C3"]
+		data_types = [int, int, float, float, str,
+	       				float, float, float, float, str,
+						float, float, float]
+		
+	id = int(data[1])
+	bdf.cord2rs[id] = {f: None for f in fields}
+	populate_fields(bdf.cord2rs, data, fields, data_types, id)
+
 def process_cquad4(bdf, data, field_format):
 	if field_format == "long":
 		fields = ["EID", "PID", "G1", "G2", "CONTINUATION MARKER",
@@ -148,7 +167,7 @@ def process_mat2(bdf, data, field_format):
 	else:
 		fields = ["MID", "G11", "G12", "G13", "G22", "G23", "G33", "RHO", "CONTINUATION MARKER",
 					dsfdf]
-		data_types [int, float, float, float, float, float, float, float, str]
+		data_types = [int, float, float, float, float, float, float, float, str]
 
 def process_mat8(bdf, data, field_format):
 	if field_format == "long":

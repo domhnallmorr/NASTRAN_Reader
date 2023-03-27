@@ -4,7 +4,7 @@ from nastran_reader import bdf_cards
 
 class BdfFile:
 	def __init__(self, filepath, process_includes=True, verbose=False):
-		self.version = "V0.2.0"
+		self.version = "V0.3.0"
 		assert os.path.isfile(filepath) is True, f'\nThe following supplied file does not exist:\n\t"{filepath}"'
 		
 		self.setup_variables()
@@ -69,14 +69,14 @@ class BdfFile:
 			"CBARs": self.cbars,
 			"CBEAMs": self.cbeams,
 			# "CELAS1s": self.celas1s,
-			# "CORD2Rs": self.cord2rs,
+			"CORD2Rs": self.cord2rs,
 			"CQUAD4s": self.cquad4s,
 			"CTRIAs": self.ctria3s,
 			"CRODs": self.crods,
 			"FORCEs": self.forces,
 			"GRIDs": self.grids,
 			"MAT1s": self.mat1s,
-			"MAT2s": self.mat2s,
+			# "MAT2s": self.mat2s,
 			"MAT8s": self.mat8s,
 			"PBARs": self.pbars,
 			"PBEAMs": self.pbeams,
@@ -158,6 +158,10 @@ class BdfFile:
 			# ---------------- CBEAM ----------------
 			elif line.lower().startswith("cbeam ") or line.lower().startswith("cbeam*") or line.lower().startswith("cbeam,"):
 				self.process_card(idx, "cbeam", bdf_cards.process_cbeam, field_format)
+
+			# ---------------- CORD2R ----------------
+			elif line.lower().startswith("cord2r ") or line.lower().startswith("cord2r*") or line.lower().startswith("cord2r,"):
+				self.process_card(idx, "cord2r", bdf_cards.process_cord2r, field_format)
 
 			# ---------------- CTRIA3 ----------------
 			elif line.lower().startswith("ctria3 ") or line.lower().startswith("ctria3*") or line.lower().startswith("ctria3,"):
