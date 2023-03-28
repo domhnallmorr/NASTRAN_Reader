@@ -104,8 +104,24 @@ def get_card_comparison_data(baseline_bdf, updated_bdf, card_type, card_id):
 			df.at[field, "Baseline"] = baseline_bdf.cards[card_type][card_id][field]
 		if updated_bdf is not None:
 			df.at[field, "Updated"] = updated_bdf.cards[card_type][card_id][field]
- 
-	df["Delta"] = df["Updated"] - df["Baseline"]
+	
+	df["Delta"] = None
+
+	for index, row in df.iterrows():
+		if type(row["Baseline"]) is str or type(row["Updated"]) is str:
+			if row["Baseline"] == row["Updated"]:
+				df.at[index, "Delta"] = "Same"
+			else:
+				df.at[index, "Delta"] = "Different"
+
+		elif row["Baseline"] is None or row["Updated"] is None:
+			if row["Baseline"] == row["Updated"]:
+				df.at[index, "Delta"] = "Same"
+			else:
+				df.at[index, "Delta"] = "Different"
+
+		else:
+			df.at[index, "Delta"] = row["Updated"] - row["Baseline"]
 	 
 	return df
 
