@@ -265,7 +265,51 @@ def process_pbeam(bdf, data, field_format):
 	id = int(data[1])
 	bdf.pbeams[id] = {f: None for f in fields}
 	populate_fields(bdf.pbeams, data, fields, data_types, id)
+
+def process_pcomp(bdf, data, field_format):
+	no_plies = 0
+
+	if field_format == "long":
+		fields = []
+	else:
+		fields = ["PID", "Z0", "NSM", "SB", "FT", "TREF", "GE", "LAM", "CONTINUATION MARKER",]
+		data_types = [int, float, float, float, str, float, float, str, str,]
+
+		ply_fields = ["START LINE", "MID", "T", "THETA", "SOUT", "MID", "T", "THETA", "SOUT", "CONTINUATION MARKER"]
+		ply_fields_tpyes = [str, int, float, float, str, int, float, float, str, str]
+		field_idx = 0
 		
+		line_count = 2
+
+		# Add the plies
+		if len(data) >= 11:
+			ply_data = data[10:]
+
+			for field in ply_data:
+				if field_idx == 1 or field_idx == 5:
+					no_plies += 1
+				
+				fields.append(f"{ply_fields[field_idx]}{no_plies}")				
+				data_types.append(ply_fields_tpyes[field_idx])
+
+				field_idx += 1
+				if field_idx > 9:
+					field_idx = 0
+
+	id = int(data[1])
+	bdf.pcomps[id] = {f: None for f in fields}
+	populate_fields(bdf.pcomps, data, fields, data_types, id)
+
+	# Remove any plies that have all none values
+	for i in range(no_plies):
+		ply = i + 1
+
+		if [bdf.pcomps[id][f"MID{ply}"], bdf.pcomps[id][f"T{ply}"], bdf.pcomps[id][f"THETA{ply}"], bdf.pcomps[id][f"SOUT{ply}"]] == [None, None, None, None]:
+			bdf.pcomps[id].pop(f"MID{ply}")
+			bdf.pcomps[id].pop(f"T{ply}")
+			bdf.pcomps[id].pop(f"THETA{ply}")
+			bdf.pcomps[id].pop(f"SOUT{ply}")
+
 def process_phsell(bdf, data, field_format):
 	fields = ["PID", "MID", "T", "MID2", "12I/T**3", "MID3", "TS/T", "NSM", "CONTINUATION MARKER", "START LINE 2", "Z1", "Z2", "MID4"]
 	data_types = [int, int, float, int, float, int, float, float, str, str, float, float, int]

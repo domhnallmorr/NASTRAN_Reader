@@ -4,7 +4,7 @@ from nastran_reader import bdf_cards
 
 class BdfFile:
 	def __init__(self, filepath, process_includes=True, verbose=False):
-		self.version = "V0.3.0"
+		self.version = "V0.4.0"
 		assert os.path.isfile(filepath) is True, f'\nThe following supplied file does not exist:\n\t"{filepath}"'
 		
 		self.setup_variables()
@@ -80,7 +80,7 @@ class BdfFile:
 			"MAT8s": self.mat8s,
 			"PBARs": self.pbars,
 			"PBEAMs": self.pbeams,
-			# "PCOMPs": self.pcomps,
+			"PCOMPs": self.pcomps,
 			# "PELASs": self.pelass,
 			"PRODs": self.prods,
 			"PSHELLs": self.pshells,
@@ -198,7 +198,11 @@ class BdfFile:
 			# ---------------- PBEAM ----------------
 			elif line.lower().startswith("pbeam ") or line.lower().startswith("pbeam*") or line.lower().startswith("pbeam,"):
 				self.process_card(idx, "pbeam", bdf_cards.process_pbeam, field_format)
-				
+
+			# ---------------- PCOMP ----------------
+			elif line.lower().startswith("pcomp ") or line.lower().startswith("pcomp*") or line.lower().startswith("pcomp,"):
+				self.process_card(idx, "pcomp", bdf_cards.process_pcomp, field_format)
+
 			# ---------------- PSHELL ----------------
 			elif line.lower().startswith("pshell ") or line.lower().startswith("pshell*") or line.lower().startswith("pshell,"):
 				self.process_card(idx, "pshell", bdf_cards.process_phsell, field_format)
@@ -272,5 +276,6 @@ class BdfFile:
 
 if __name__ == "__main__":
 
-	bdf = BdfFile(r"C:\Users\ev662f\Desktop\NEW_UPP_ATT_POS_FLT_new.bdf", verbose=True)
-	
+	bdf = BdfFile(r"C:\Users\ev662f\Desktop\NEW_UPP_ATT_POS_FLT_new(1).bdf", verbose=True)
+	# bdf = BdfFile(r"C:\Users\ev662f\Desktop\test.bdf", verbose=True)
+	print(bdf.pcomps)
