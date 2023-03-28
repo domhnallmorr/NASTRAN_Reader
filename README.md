@@ -16,6 +16,7 @@ Currently Support Cards:
 - MAT8
 - PBAR
 - PBEAM* (Assumes only 2 intermediate stations)
+- PCOMP
 - PSHELL
 
 
