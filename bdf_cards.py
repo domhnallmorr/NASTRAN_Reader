@@ -127,6 +127,17 @@ def process_force(bdf, data, field_format):
 	bdf.forces[card_id] = {f: None for f in fields}
 	populate_fields(bdf.forces, data, fields, data_types, card_id)
 
+def process_grav(bdf, data, field_format):
+	if field_format == "long":
+		raise Exception("GRAV card is only supported for small field format")
+	else:
+		fields = ["SID", "CID",  "A", "N1", "N2", "N3", "MB"]
+		data_types = [int, int, float, float, float, float, float]
+
+	id = int(data[1])
+	bdf.gravs[id] = {f: None for f in fields}
+	populate_fields(bdf.gravs, data, fields, data_types, id)
+
 def process_grid(bdf, data, field_format):
 	if field_format == "long":
 		fields = ["SID", "CP",  "X1", "X2", "CONTINUATION MARKER", "X3", "CD"]

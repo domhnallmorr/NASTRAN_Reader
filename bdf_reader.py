@@ -4,7 +4,7 @@ from nastran_reader import bdf_cards
 
 class BdfFile:
 	def __init__(self, filepath, process_includes=True, verbose=False):
-		self.version = "V0.4.1"
+		self.version = "V0.5.0"
 		assert os.path.isfile(filepath) is True, f'\nThe following supplied file does not exist:\n\t"{filepath}"'
 		
 		self.setup_variables()
@@ -50,6 +50,7 @@ class BdfFile:
 		self.ctria3s = {}
 		self.crods = {}
 		self.forces = {}
+		self.gravs = {}
 		self.grids = {}
 		self.mat1s = {}
 		self.mat2s = {}
@@ -74,6 +75,7 @@ class BdfFile:
 			"CTRIAs": self.ctria3s,
 			"CRODs": self.crods,
 			"FORCEs": self.forces,
+			"GRAVs": self.gravs,
 			"GRIDs": self.grids,
 			"MAT1s": self.mat1s,
 			# "MAT2s": self.mat2s,
@@ -178,6 +180,10 @@ class BdfFile:
 			# ---------------- FORCE ----------------
 			elif line.lower().startswith("force ") or line.lower().startswith("force*") or line.lower().startswith("force,"):
 				self.process_card(idx, "force", bdf_cards.process_force, field_format)
+
+			# ---------------- GRAV ----------------
+			elif line.lower().startswith("grav ") or line.lower().startswith("grav*") or line.lower().startswith("grav,"):
+				self.process_card(idx, "grav", bdf_cards.process_grav, field_format)
 
 			# ---------------- GRID ----------------
 			elif line.lower().startswith("grid ") or line.lower().startswith("grid*") or line.lower().startswith("grid,"):
