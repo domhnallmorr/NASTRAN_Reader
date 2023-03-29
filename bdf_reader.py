@@ -4,7 +4,7 @@ from nastran_reader import bdf_cards
 
 class BdfFile:
 	def __init__(self, filepath, process_includes=True, verbose=False):
-		self.version = "V0.5.2"
+		self.version = "V0.5.3"
 		assert os.path.isfile(filepath) is True, f'\nThe following supplied file does not exist:\n\t"{filepath}"'
 		
 		self.setup_variables()
@@ -242,14 +242,29 @@ class BdfFile:
 				break
 			i += 1	
 		
-		return ''.join(self.data[idx:idx+i])
+		# Add blank lines if unmatched continuation marker found
+		data = self.data[idx:idx+i]
+
+		blank_lines_idx = []
+
+		for idx, line in enumerate(data):
+			if idx > 0:
+				if line.strip().startswith("+") and data[idx-1].strip().endswith("+") is False:
+					blank_lines_idx.append(idx)
+
+		blank_lines_idx = sorted(blank_lines_idx, reverse=True)
+		for idx in blank_lines_idx:
+			data.insert(idx, " "*80)
+
+		return ''.join(data)
+	
+		#return ''.join(self.data[idx:idx+i])
 
 	def process_card(self, line_idx, card_type, card_func, field_format):
 		data = self.get_card_lines(line_idx, field_format)
 		data = self.process_data_into_fields(data, field_format)
-		
 		card_func(self, data, field_format)
-
+	
 	def process_data_into_fields(self, line, field_format):
 		line = line.replace("\t", "   ")
 		data = []
@@ -282,6 +297,6 @@ class BdfFile:
 
 if __name__ == "__main__":
 
-	bdf = BdfFile(r"C:\Users\ev662f\Desktop\NEW_UPP_ATT_POS_FLT_new(1).bdf", verbose=True)
+	bdf = BdfFile(r"P:\Projects - Closed\BIL-00177_R00 - JSQ - 737NG Row 44 Wifi Antenna Removal\02 Reference Docs\Stress Data\SE Data\Fuselage\737-700IDW-WLT-TKSA-ult-JB20-20150710.bdf", verbose=True)
 	# bdf = BdfFile(r"C:\Users\ev662f\Desktop\test.bdf", verbose=True)
 	print(bdf.mat8s)
