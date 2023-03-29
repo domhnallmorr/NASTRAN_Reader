@@ -324,9 +324,23 @@ def process_pcomp(bdf, data, field_format):
 			bdf.pcomps[id].pop(f"THETA{ply}")
 			bdf.pcomps[id].pop(f"SOUT{ply}")
 
+def process_prod(bdf, data, field_format):
+	if field_format == "long":
+		raise Exception("PROD card is only supported for small field format at this time")
+	else:
+		fields = ["PID", "MID", "A", "J", "C", "NSM",]
+		data_types = [int, int, float, float, float, float]
+	
+	id = int(data[1])
+	bdf.prods[id] = {f: None for f in fields}
+	populate_fields(bdf.prods, data, fields, data_types, id)	
+
 def process_phsell(bdf, data, field_format):
-	fields = ["PID", "MID", "T", "MID2", "12I/T**3", "MID3", "TS/T", "NSM", "CONTINUATION MARKER", "START LINE 2", "Z1", "Z2", "MID4"]
-	data_types = [int, int, float, int, float, int, float, float, str, str, float, float, int]
+	if field_format == "long":
+		raise Exception("PROD card is only supported for small field format at this time")
+	else:
+		fields = ["PID", "MID", "T", "MID2", "12I/T**3", "MID3", "TS/T", "NSM", "CONTINUATION MARKER", "START LINE 2", "Z1", "Z2", "MID4"]
+		data_types = [int, int, float, int, float, int, float, float, str, str, float, float, int]
 	
 	id = int(data[1])
 	bdf.pshells[id] = {f: None for f in fields}

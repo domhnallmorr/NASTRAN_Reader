@@ -18,6 +18,7 @@ Currently Support Cards:
 - PBAR
 - PBEAM* (Assumes only 2 intermediate stations)
 - PCOMP
+- PROD
 - PSHELL
 
 ## Limitations

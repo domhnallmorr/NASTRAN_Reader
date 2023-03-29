@@ -4,7 +4,7 @@ from nastran_reader import bdf_cards
 
 class BdfFile:
 	def __init__(self, filepath, process_includes=True, verbose=False):
-		self.version = "V0.5.3"
+		self.version = "V0.6.0"
 		assert os.path.isfile(filepath) is True, f'\nThe following supplied file does not exist:\n\t"{filepath}"'
 		
 		self.setup_variables()
@@ -209,6 +209,10 @@ class BdfFile:
 			elif line.lower().startswith("pcomp ") or line.lower().startswith("pcomp*") or line.lower().startswith("pcomp,"):
 				self.process_card(idx, "pcomp", bdf_cards.process_pcomp, field_format)
 
+			# ---------------- PRODS ----------------
+			elif line.lower().startswith("prod ") or line.lower().startswith("prod*") or line.lower().startswith("prod,"):
+				self.process_card(idx, "prod", bdf_cards.process_prod, field_format)
+
 			# ---------------- PSHELL ----------------
 			elif line.lower().startswith("pshell ") or line.lower().startswith("pshell*") or line.lower().startswith("pshell,"):
 				self.process_card(idx, "pshell", bdf_cards.process_phsell, field_format)
@@ -297,6 +301,6 @@ class BdfFile:
 
 if __name__ == "__main__":
 
-	bdf = BdfFile(r"P:\Projects - Closed\BIL-00177_R00 - JSQ - 737NG Row 44 Wifi Antenna Removal\02 Reference Docs\Stress Data\SE Data\Fuselage\737-700IDW-WLT-TKSA-ult-JB20-20150710.bdf", verbose=True)
+	bdf = BdfFile(r"C:\Users\ev662f\Documents\python\Testing\Fuselage\737-700_BCA_Ftg_M16-018_Fuse_SE.dat", verbose=True)
 	# bdf = BdfFile(r"C:\Users\ev662f\Desktop\test.bdf", verbose=True)
 	print(bdf.mat8s)
