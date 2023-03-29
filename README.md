@@ -11,6 +11,7 @@ Currently Support Cards:
 - CQUAD
 - CROD
 - FORCE
+- GRAV (short field only)
 - GRID
 - MAT1
 - MAT8
@@ -18,7 +19,6 @@ Currently Support Cards:
 - PBEAM* (Assumes only 2 intermediate stations)
 - PCOMP
 - PSHELL
-
 
 ## Limitations
 - Only tested with short field format

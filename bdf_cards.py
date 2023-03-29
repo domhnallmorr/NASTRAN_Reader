@@ -129,7 +129,7 @@ def process_force(bdf, data, field_format):
 
 def process_grav(bdf, data, field_format):
 	if field_format == "long":
-		raise Exception("GRAV card is only supported for small field format")
+		raise Exception("GRAV card is only supported for small field format at this time")
 	else:
 		fields = ["SID", "CID",  "A", "N1", "N2", "N3", "MB"]
 		data_types = [int, int, float, float, float, float, float]
@@ -174,23 +174,26 @@ def process_mat1(bdf, data, field_format):
 
 def process_mat2(bdf, data, field_format):
 	if field_format == "long":
-		pass
+		raise Exception("MAT2 card is only supported for small field format at this time")
 	else:
 		fields = ["MID", "G11", "G12", "G13", "G22", "G23", "G33", "RHO", "CONTINUATION MARKER",
-					dsfdf]
-		data_types = [int, float, float, float, float, float, float, float, str]
+					"START LINE 2", "A1", "A2", "A3", "TREF", "GE", "ST", "SC", "SS", "CONTINUATION MARKER",
+					"MCSID"]
+		data_types = [int, float, float, float, float, float, float, float, str,
+					str, float, float, float, float, float, float, float, float, str,
+					int]
 
 def process_mat8(bdf, data, field_format):
 	if field_format == "long":
 		fields = ["MID", "E1", "E2", "NU12", "CONTINUATION MARKER",
-	    			"START LINE 2", "G12", "G1Z", "G2Z", "RHO", "CONTINUATION MARKER 2",
-				    "START LINE 3", "A1", "A2", "TREF", "Xt",  "CONTINUATION MARKER 3",
-				    "START LINE 4", "Xc", "Yt", "Yc", "S", "CONTINUATION MARKER 4",
-				    "START LINE 5", "GE", "F12", "STRN"]
+	    			"G12", "G1Z", "G2Z", "RHO", "CONTINUATION MARKER 2",
+				    "A1", "A2", "TREF", "Xt",  "CONTINUATION MARKER 3",
+				    "Xc", "Yt", "Yc", "S", "CONTINUATION MARKER 4",
+				    "GE", "F12", "STRN"]
 		data_types = [int, float, float, float, str,
-					str, float, float, float, float, str,
-					str, float, float, float, float, str,
-					str, float, float, float]
+					float, float, float, float, str,
+					float, float, float, float, str,
+					float, float, float]
 	else:
 		fields = ["MID", "E1", "E2", "NU12", "G12", "G1Z", "G2Z", "RHO", "CONTINUATION MARKER",
 					"START LINE 2", "A1", "A2", "TREF", "Xt", "Xc", "Yt", "Yc", "S", "CONTINUATION MARKER 2",

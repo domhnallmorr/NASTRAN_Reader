@@ -78,7 +78,7 @@ class BdfFile:
 			"GRAVs": self.gravs,
 			"GRIDs": self.grids,
 			"MAT1s": self.mat1s,
-			# "MAT2s": self.mat2s,
+			"MAT2s": self.mat2s,
 			"MAT8s": self.mat8s,
 			"PBARs": self.pbars,
 			"PBEAMs": self.pbeams,
@@ -284,4 +284,4 @@ if __name__ == "__main__":
 
 	bdf = BdfFile(r"C:\Users\ev662f\Desktop\NEW_UPP_ATT_POS_FLT_new(1).bdf", verbose=True)
 	# bdf = BdfFile(r"C:\Users\ev662f\Desktop\test.bdf", verbose=True)
-	print(bdf.pcomps)
+	print(bdf.mat8s)
