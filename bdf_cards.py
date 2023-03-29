@@ -350,4 +350,11 @@ def populate_fields(dict, data, fields, data_types, id):
 								field[idx] = "e-"
 						field = "".join(field)
 				
+				# Handle for double precision marker i.e De+
+				if data_types[fields_idx] in [float, int]:
+					if "De+" in field:
+						field = field.replace("De+", "e+")
+					elif "De-" in field:
+						field = field.replace("De-", "e-")
+
 				dict[id][fields[fields_idx]] = data_types[fields_idx](field)
