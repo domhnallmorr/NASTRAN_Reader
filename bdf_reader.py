@@ -4,7 +4,7 @@ from nastran_reader import bdf_cards
 
 class BdfFile:
 	def __init__(self, filepath, process_includes=True, verbose=False):
-		self.version = "V0.6.2"
+		self.version = "V0.6.3"
 		assert os.path.isfile(filepath) is True, f'\nThe following supplied file does not exist:\n\t"{filepath}"'
 		
 		self.setup_variables()
@@ -26,6 +26,7 @@ class BdfFile:
 			self.get_all_include_files()
 		self.remove_comments_and_blank_lines()
 		self.parse_file()
+		self.sumarise_unsupported_cards()
 
 		print(f"{len(self.errors)} Errors Occured")
 		for error in self.errors:
@@ -219,8 +220,14 @@ class BdfFile:
 				self.process_card(idx, "pshell", bdf_cards.process_phsell, field_format)
 
 			else: # handle for unsupported card found
-				if line[0] not in ["+", " "]:
-					self.unsupported_cards.append(line.split()[0])
+				if line[0] not in ["+", " ", "*"]:
+					if line.lower().startswith("param"):
+						unsupported_card = line.rstrip()
+					else:
+						unsupported_card = line.split()[0]
+						if "=" in unsupported_card:
+							unsupported_card = unsupported_card.split("=")[0].strip()
+					self.unsupported_cards.append(unsupported_card)
 
 	def identify_format_type(self, line):
 		field_format = "short"
@@ -304,10 +311,16 @@ class BdfFile:
 		for card in self.cards.keys():
 			self.summary[card] = len(self.cards[card])
 
+	def sumarise_unsupported_cards(self):
+		self.unsupported_cards = set(self.unsupported_cards)
+
+		if self.verbose:
+			print(f"{len(self.unsupported_cards)} CARDS Found that are not Support")
+
 if __name__ == "__main__":
 
-	# bdf = BdfFile(r"C:\Users\ev662f\Documents\python\Testing\Fuselage\737-700_BCA_Ftg_M16-018_Fuse_SE.dat", verbose=True)
-	bdf = BdfFile(r"C:\Users\ev662f\Desktop\NEW_UPP_ATT_POS_FLT_new.bdf", verbose=True)
+	bdf = BdfFile(r"C:\Users\ev662f\Documents\python\Testing\Fuselage\737-700_BCA_Ftg_M16-018_Fuse_SE.dat", verbose=True)
+	# bdf = BdfFile(r"C:\Users\ev662f\Desktop\NEW_UPP_ATT_POS_FLT_new.bdf", verbose=True)
 	# bdf = BdfFile(r"C:\Users\ev662f\Desktop\test.bdf", verbose=True)
 	print(bdf.mat8s)
-	print(set(bdf.unsupported_cards))
+	print(bdf.unsupported_cards)
