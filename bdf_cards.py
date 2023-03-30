@@ -284,7 +284,7 @@ def process_pcomp(bdf, data, field_format):
 	no_plies = 0
 
 	if field_format == "long":
-		fields = []
+		raise Exception("PCOMP card is only supported for small field format at this time")
 	else:
 		fields = ["PID", "Z0", "NSM", "SB", "FT", "TREF", "GE", "LAM", "CONTINUATION MARKER",]
 		data_types = [int, float, float, float, str, float, float, str, str,]
