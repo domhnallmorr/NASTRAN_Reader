@@ -4,7 +4,7 @@ from nastran_reader import bdf_cards
 
 class BdfFile:
 	def __init__(self, filepath, process_includes=True, verbose=False):
-		self.version = "V0.6.1"
+		self.version = "V0.6.2"
 		assert os.path.isfile(filepath) is True, f'\nThe following supplied file does not exist:\n\t"{filepath}"'
 		
 		self.setup_variables()
@@ -37,6 +37,7 @@ class BdfFile:
 		self.current_section = "excecutive control"
 		self.include_files = {}
 		self.summary = {}
+		self.unsupported_cards = []
 
 		self.errors = []
 		self.number_of_errors = 0
@@ -217,6 +218,10 @@ class BdfFile:
 			elif line.lower().startswith("pshell ") or line.lower().startswith("pshell*") or line.lower().startswith("pshell,"):
 				self.process_card(idx, "pshell", bdf_cards.process_phsell, field_format)
 
+			else: # handle for unsupported card found
+				if line[0] not in ["+", " "]:
+					self.unsupported_cards.append(line.split()[0])
+
 	def identify_format_type(self, line):
 		field_format = "short"
 		if "," in line:
@@ -253,7 +258,7 @@ class BdfFile:
 
 		for idx, line in enumerate(data):
 			if idx > 0:
-				if line.strip().startswith("+") and data[idx-1].strip().endswith("+") is False:
+				if line.strip().startswith("+") and data[idx-1].strip().endswith("+") is False and len(line.strip()) > 1:
 					blank_lines_idx.append(idx)
 
 		blank_lines_idx = sorted(blank_lines_idx, reverse=True)
@@ -301,6 +306,8 @@ class BdfFile:
 
 if __name__ == "__main__":
 
-	bdf = BdfFile(r"C:\Users\ev662f\Documents\python\Testing\Fuselage\737-700_BCA_Ftg_M16-018_Fuse_SE.dat", verbose=True)
+	# bdf = BdfFile(r"C:\Users\ev662f\Documents\python\Testing\Fuselage\737-700_BCA_Ftg_M16-018_Fuse_SE.dat", verbose=True)
+	bdf = BdfFile(r"C:\Users\ev662f\Desktop\NEW_UPP_ATT_POS_FLT_new.bdf", verbose=True)
 	# bdf = BdfFile(r"C:\Users\ev662f\Desktop\test.bdf", verbose=True)
 	print(bdf.mat8s)
+	print(set(bdf.unsupported_cards))
