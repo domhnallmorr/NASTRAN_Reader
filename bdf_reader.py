@@ -4,7 +4,7 @@ from nastran_reader import bdf_cards
 
 class BdfFile:
 	def __init__(self, filepath, process_includes=True, verbose=False):
-		self.version = "V0.6.3"
+		self.version = "V0.6.4"
 		assert os.path.isfile(filepath) is True, f'\nThe following supplied file does not exist:\n\t"{filepath}"'
 		
 		self.setup_variables()
@@ -51,6 +51,7 @@ class BdfFile:
 		self.cquad4s = {}
 		self.ctria3s = {}
 		self.crods = {}
+		self.cshears = {}
 		self.forces = {}
 		self.gravs = {}
 		self.grids = {}
@@ -76,6 +77,7 @@ class BdfFile:
 			"CQUAD4s": self.cquad4s,
 			"CTRIAs": self.ctria3s,
 			"CRODs": self.crods,
+			"CSHEARs": self.cshears,
 			"FORCEs": self.forces,
 			"GRAVs": self.gravs,
 			"GRIDs": self.grids,
@@ -92,8 +94,8 @@ class BdfFile:
 			# "RBE3s": self.rbe3s,
 			# "SPC1s": self.spc1s,
 			# "SPCADDs": self.spcadds,
-
 		}
+
 	def get_all_include_files(self):
 		if self.verbose is True:
 			print("Searching for Input Files")
@@ -178,7 +180,11 @@ class BdfFile:
 			# ---------------- CROD ----------------
 			elif line.lower().startswith("crod ") or line.lower().startswith("crod*") or line.lower().startswith("crod,"):
 				self.process_card(idx, "crod", bdf_cards.process_crod, field_format)
-				
+
+			# ---------------- CSHEAR ----------------
+			elif line.lower().startswith("cshear ") or line.lower().startswith("cshear*") or line.lower().startswith("cshear,"):
+				self.process_card(idx, "cshear", bdf_cards.process_cshear, field_format)
+
 			# ---------------- FORCE ----------------
 			elif line.lower().startswith("force ") or line.lower().startswith("force*") or line.lower().startswith("force,"):
 				self.process_card(idx, "force", bdf_cards.process_force, field_format)

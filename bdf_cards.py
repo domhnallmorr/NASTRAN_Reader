@@ -110,7 +110,18 @@ def process_crod(bdf, data, field_format):
 	id = int(data[1])
 	bdf.crods[id] = {f: None for f in fields}
 	populate_fields(bdf.crods, data, fields, data_types, id)
-	
+
+def process_cshear(bdf, data, field_format):
+	if field_format == "long":
+		raise Exception("PCOMP card is only supported for small field format at this time")
+	else:
+		fields = ["EID", "PID", "G1", "G2", "G3", "G4"]
+		data_types = [int, int, int, int, int, int]
+
+	id = int(data[1])
+	bdf.cshears[id] = {f: None for f in fields}
+	populate_fields(bdf.cshears, data, fields, data_types, id)
+
 def process_force(bdf, data, field_format):
 	if field_format == "long":
 		fields = ["SID", "G", "CID", "F", "CONTINUATION MARKER", "N1", "N2", "N3"]
@@ -337,7 +348,7 @@ def process_prod(bdf, data, field_format):
 
 def process_phsell(bdf, data, field_format):
 	if field_format == "long":
-		raise Exception("PROD card is only supported for small field format at this time")
+		raise Exception("PSHELL card is only supported for small field format at this time")
 	else:
 		fields = ["PID", "MID", "T", "MID2", "12I/T**3", "MID3", "TS/T", "NSM", "CONTINUATION MARKER", "START LINE 2", "Z1", "Z2", "MID4"]
 		data_types = [int, int, float, int, float, int, float, float, str, str, float, float, int]

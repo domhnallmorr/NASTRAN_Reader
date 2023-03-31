@@ -10,16 +10,18 @@ Currently Support Cards:
 - CTRIA3
 - CQUAD
 - CROD
+- CSHEAR (short field only)
 - FORCE
 - GRAV (short field only)
 - GRID
 - MAT1
+- MAT2 (short field only)
 - MAT8
 - PBAR
 - PBEAM* (Assumes only 2 intermediate stations)
-- PCOMP
-- PROD
-- PSHELL
+- PCOMP (short field only)
+- PROD (short field only)
+- PSHELL (short field only)
 
 ## Limitations
 - Only tested with short field format
