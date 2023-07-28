@@ -4,7 +4,7 @@ from nastran_reader import bdf_cards
 
 class BdfFile:
 	def __init__(self, filepath, process_includes=True, verbose=False):
-		self.version = "V0.6.4"
+		self.version = "V0.6.5"
 		assert os.path.isfile(filepath) is True, f'\nThe following supplied file does not exist:\n\t"{filepath}"'
 		
 		self.setup_variables()
@@ -325,7 +325,7 @@ class BdfFile:
 
 if __name__ == "__main__":
 
-	bdf = BdfFile(r"C:\Users\ev662f\Documents\python\Testing\Fuselage\737-700_BCA_Ftg_M16-018_Fuse_SE.dat", verbose=True)
+	bdf = BdfFile(r"C:\Users\ev662f\AppData\Local\Programs\Python\Python311\Lib\site-packages\nastran_reader\tests\pbeam_test.bdf", verbose=True)
 	# bdf = BdfFile(r"C:\Users\ev662f\Desktop\NEW_UPP_ATT_POS_FLT_new.bdf", verbose=True)
 	# bdf = BdfFile(r"C:\Users\ev662f\Desktop\test.bdf", verbose=True)
 	print(bdf.mat8s)

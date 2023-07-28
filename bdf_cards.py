@@ -244,6 +244,7 @@ def process_pbar(bdf, data, field_format):
 	populate_fields(bdf.pbars, data, fields, data_types, id)				
 
 def process_pbeam(bdf, data, field_format):
+
 	if field_format == "long":
 		fields = ["PID", "MID", "A(A)", "I1(A)", "CONTINUATION MARKER",
 					"I2(A)", "I12(A)", "J(A)", "NSM", "CONTINUATION MARKER 2",
@@ -287,9 +288,33 @@ def process_pbeam(bdf, data, field_format):
 						str, float, float, float, float, float, float, float, float, str,
 						str, float, float, float, float, float, float, float, float, str,
 						]
+					
 	id = int(data[1])
 	bdf.pbeams[id] = {f: None for f in fields}
+
+	# HANDLE IF LINE 2 IS NOT INCLUDED
+	if len(data) >= fields.index("C1(A)") + 1:
+		if field_format == "long":
+			pass
+		else:
+			if "yes" in data[fields.index("C1(A)") + 1].lower() or "no" in data[fields.index("C1(A)") + 1].lower(): # +1 accounts for "PBEAM" in first line
+				fields = ["PID", "MID", "A(A)", "I1(A)", "I2(A)", "I12(A)", "J(A)", "NSM(A)", "CONTINUATION MARKER",
+							# "START LINE 2", "C1(A)", "C2(A)", "D1(A)", "D2(A)", "E1(A)", "E2(A)", "F1(A)", "F2(A)", "CONTINUATION MARKER 2",
+							"START LINE 3", "SO", "X/XB", "A", "I1", "I2", "I12", "J", "NSM", "CONTINUATION MARKER 3",
+							"START LINE 4", "C1", "C2", "D1", "D2", "E1", "E2", "F1", "F2", "CONTINUATION MARKER 4",
+							"START LINE 5", "K1", "K2", "S1", "S2", "NSI(A)", "NSI(B)", "CW(A)", "CW(B)", "CONTINUATION MARKER 5",
+							"START LINE 6", "M1(A)", "M2(A)", "M1(B)", "M2(B)", "N1(A)", "N2(A)", "N1(B)", "N2(B)", "CONTINUATION MARKER 6"]
+
+				data_types = [int, int, float, float, float, float, float, float, str,
+								# str, float, float, float, float, float, float, float, float, str,
+								str, str, float, float, float, float, float, float, float, str,
+								str, float, float, float, float, float, float, float, float, str,
+								str, float, float, float, float, float, float, float, float, str,
+								str, float, float, float, float, float, float, float, float, str,
+								]
+	
 	populate_fields(bdf.pbeams, data, fields, data_types, id)
+
 
 def process_pcomp(bdf, data, field_format):
 	no_plies = 0
