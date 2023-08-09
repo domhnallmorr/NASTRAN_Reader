@@ -113,7 +113,7 @@ def process_crod(bdf, data, field_format):
 
 def process_cshear(bdf, data, field_format):
 	if field_format == "long":
-		raise Exception("PCOMP card is only supported for small field format at this time")
+		raise Exception("CSHEAR card is only supported for small field format at this time")
 	else:
 		fields = ["EID", "PID", "G1", "G2", "G3", "G4"]
 		data_types = [int, int, int, int, int, int]
@@ -406,5 +406,10 @@ def populate_fields(dict, data, fields, data_types, id):
 						field = field.replace("De+", "e+")
 					elif "De-" in field:
 						field = field.replace("De-", "e-")
+
+				# if data type is string, remove leading and trailing space
+				if data_types[fields_idx] is str:
+					field = field.rstrip()
+					field = field.lstrip()
 
 				dict[id][fields[fields_idx]] = data_types[fields_idx](field)
