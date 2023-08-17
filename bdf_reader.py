@@ -4,7 +4,7 @@ from nastran_reader import bdf_cards
 
 class BdfFile:
 	def __init__(self, filepath, process_includes=True, verbose=False):
-		self.version = "V0.6.5"
+		self.version = "V0.6.7"
 		assert os.path.isfile(filepath) is True, f'\nThe following supplied file does not exist:\n\t"{filepath}"'
 		
 		self.setup_variables()
@@ -323,6 +323,12 @@ class BdfFile:
 		if self.verbose:
 			print(f"{len(self.unsupported_cards)} CARDS Found that are not Support")
 
+	def get_grid_coordinates(self, grid_id):
+
+		grid = self.grids[grid_id]
+
+		return grid["X1"], grid["X2"], grid["X3"]
+	
 if __name__ == "__main__":
 
 	bdf = BdfFile(r"C:\Users\ev662f\AppData\Local\Programs\Python\Python311\Lib\site-packages\nastran_reader\tests\pbeam_test.bdf", verbose=True)
